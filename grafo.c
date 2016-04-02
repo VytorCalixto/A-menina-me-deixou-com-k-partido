@@ -19,3 +19,15 @@ int direcionado(grafo g){
 int ponderado(grafo g){
   return g.ponderado;
 }
+
+typedef struct vertice *vertice{
+  char* nome;
+}
+
+char *nome_vertice(vertice v){
+  return v.nome;
+}
+
+int destroi_grafo(void *g){
+  free(g);
+}
