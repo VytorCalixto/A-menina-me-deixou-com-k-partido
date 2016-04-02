@@ -10,23 +10,23 @@ typedef struct grafo {
 };
 
 char *nome_grafo(grafo g){
-  return g.nome;
+  return g->nome;
 }
 
 int direcionado(grafo g){
-  return g.direcionado;
+  return g->direcionado;
 }
 
 int ponderado(grafo g){
-  return g.ponderado;
+  return g->ponderado;
 }
 
-typedef struct vertice *vertice{
+typedef struct vertice{
   char* nome;
-}
+};
 
 char *nome_vertice(vertice v){
-  return v.nome;
+  return v->nome;
 }
 
 grafo le_grafo(FILE *input){
@@ -35,11 +35,11 @@ grafo le_grafo(FILE *input){
   grafo g;
   fscanf(input, "%s", buff); // le a primeira palavra
   if(buff == "digraph") // direcionado?
-    g.direcionado = 1;
+    g->direcionado = 1;
   else
-    g.direcionado = 0;
+    g->direcionado = 0;
   fscanf(input, "%s", buff); // le a segunda palavra
-  g.nome = buff; // que é o nome do grafo
+  g->nome = buff; // que é o nome do grafo
 
   // TODO: Ler vertices, arestas e pesos;
 }
