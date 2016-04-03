@@ -5,6 +5,13 @@
 #include <string.h>
 
 
+typedef struct grafo {
+    int direcionado;
+    int ponderado;
+    char* nome;
+    lista vertices;
+};
+
 typedef struct vertice{
     char* nome;
     unsigned int grau; // Para grafos não-direcionados
@@ -14,16 +21,14 @@ typedef struct vertice{
     lista arestas;
 };
 
+typedef struct aresta{
+    long int peso;
+    vertice *destino;
+} aresta;
+
 char *nome_vertice(vertice v){
     return v->nome;
 }
-
-typedef struct grafo {
-    int direcionado;
-    int ponderado;
-    char* nome;
-    lista vertices;
-};
 
 char *nome_grafo(grafo g){
     return g->nome;
@@ -88,7 +93,15 @@ grafo le_grafo(FILE *input){
             if(!gf->ponderado && agget(e, (char *)"peso") != NULL) {
                 gf->ponderado = 1;
             }
-            insere_lista(e, v->arestas);
+            for(no p=primeiro_no(gf->vertices); p; p=proximo_no(p)) {
+                vertice w = (vertice) conteudo(n);
+                if(nome_vertice(w) == agnameof(e->node)) {
+                    aresta a;
+                    a.peso = atoi(agget(e, (char *)"peso"));
+                    a.destino = &w;
+                    insere_lista(&a, v->arestas);
+                }
+            }
         }
     }
 
@@ -100,7 +113,7 @@ int destroi_grafo(void *g){
     for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
         vertice v = (vertice) conteudo(n);
         //TODO: função para passar
-        destroi_lista(vertice->arestas, NULL);
+        destroi_lista(v->arestas, NULL);
     }
     //TODO: função
     destroi_lista(((grafo) g)->vertices, NULL);
