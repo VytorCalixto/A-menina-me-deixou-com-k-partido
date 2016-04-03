@@ -138,7 +138,7 @@ grafo escreve_grafo(FILE *output, grafo g){
             aresta a = (aresta) conteudo(p);
             fprintf(output, "\"%s\"", nome_vertice(v));
             fprintf(output, "%s", direcionado(g) ? " -> " : " -- ");
-            fprintf(output, "\"%s\"", nome_vertice(*(a->destino)));
+            fprintf(output, "\"%s\"", nome_vertice(a->destino));
             if(ponderado(g)) fprintf(output, " [peso = %li]", a->peso);
             fprintf(output, "\n");
         }
