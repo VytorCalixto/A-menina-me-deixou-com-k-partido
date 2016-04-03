@@ -70,7 +70,7 @@ grafo le_grafo(FILE *input){
         return NULL;
     }
 
-    // gf.nome = agnameof(g);
+    gf->nome = malloc(1 + strlen(agnameof(g)));
     strcpy(gf->nome, agnameof(g));
     printf("nome: %s\n", gf->nome);
     gf->direcionado = (agisdirected(g) ? 1 : 0);
@@ -97,10 +97,10 @@ grafo le_grafo(FILE *input){
                 gf->ponderado = 1;
             }
             for(no p=primeiro_no(gf->vertices); p; p=proximo_no(p)) {
-                vertice w = (vertice) conteudo(n);
-                if(nome_vertice(w) == agnameof(e->node)) {
+                vertice w = (vertice) conteudo(p);
+                if(strcmp(nome_vertice(w), agnameof(e->node)) == 0) {
                     aresta a = malloc(sizeof(struct aresta));
-                    a->peso = atoi(agget(e, (char *)"peso"));
+                    a->peso = (long int) agget(e, (char *)"peso");
                     a->destino = w;
                     insere_lista(a, v->arestas);
                 }
@@ -174,8 +174,7 @@ grafo copia_grafo(grafo g) {
             // vértice do grafo original
             vertice w = (vertice) conteudo(p);
             // se os vértices são os mesmos, começamos a cópia das arestas
-            // if(strcmp(nome_vertice(w), nome_vertice(v)) == 0) {
-            if(nome_vertice(w) == nome_vertice(v)) {
+            if(strcmp(nome_vertice(w), nome_vertice(v)) == 0) {
                 for(no t=primeiro_no(w->arestas); t; t=proximo_no(t)) {
                     aresta a = (aresta) conteudo(p);
                     aresta b = malloc(sizeof(struct aresta));
@@ -185,8 +184,7 @@ grafo copia_grafo(grafo g) {
                     //      de cópia
                     for(no r=primeiro_no(gf->vertices); r; r=proximo_no(r)) {
                         vertice y = (vertice) conteudo(r);
-                        // if(strcmp(nome_vertice(dest), nome_vertice(y)) == 0) {
-                        if(nome_vertice(dest) == nome_vertice(y)) {
+                        if(strcmp(nome_vertice(dest), nome_vertice(y)) == 0) {
                             puts("vertices iguais");
                             b->destino = y;
                             insere_lista(b, v->arestas);
