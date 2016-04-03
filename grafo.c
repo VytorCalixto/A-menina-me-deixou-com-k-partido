@@ -255,3 +255,18 @@ unsigned int grau(vertice v, int direcao, grafo g){
         // TODO: retorno de erro
     }
 }
+
+int compare(void* a, void* b){
+  if ((vertice) a == (vertice) b)
+    return 1;
+  else
+    return 0;
+}
+
+int pertence(int cmp(void *,void *), void *cont, lista l){
+  int encontrou = 0;
+  for(no n=primeiro_no(l); n; n=proximo_no(n)) {
+      if (cmp(conteudo(n),cont)) encontrou = 1;
+  }
+  return encontrou;
+}
