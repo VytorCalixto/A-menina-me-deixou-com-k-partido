@@ -147,6 +147,59 @@ grafo escreve_grafo(FILE *output, grafo g){
     return g;
 }
 
+grafo copia_grafo(grafo g) {
+    grafo gf = malloc(sizeof(struct grafo));
+    gf->nome = malloc(1 + strlen(g->nome));
+    strcpy(gf->nome, g->nome);
+    gf->direcionado = g->direcionado;
+    gf->ponderado = g->ponderado;
+    gf->vertices = constroi_lista();
+    //copia os vértices
+    for(no n=primeiro_no(g->vertices); n; n=proximo_no(n)) {
+        vertice v = (vertice) conteudo(n);
+        vertice w = malloc(sizeof(struct vertice));
+        w->nome = malloc(1 + strlen(v->nome));
+        strcpy(w->nome, v->nome);
+        w->grau = v->grau;
+        w->grau_ent = v->grau_ent;
+        w->grau_sai = v->grau_sai;
+        w->arestas = constroi_lista();
+        insere_lista(w, gf->vertices);
+    }
+
+    for(no n=primeiro_no(gf->vertices); n; n=proximo_no(n)) {
+        //vértice atual do grafo de cópia
+        vertice v = (vertice) conteudo(n);
+        for(no p=primeiro_no(g->vertices); p; p=proximo_no(p)) {
+            // vértice do grafo original
+            vertice w = (vertice) conteudo(p);
+            // se os vértices são os mesmos, começamos a cópia das arestas
+            // if(strcmp(nome_vertice(w), nome_vertice(v)) == 0) {
+            if(nome_vertice(w) == nome_vertice(v)) {
+                for(no t=primeiro_no(w->arestas); t; t=proximo_no(t)) {
+                    aresta a = (aresta) conteudo(p);
+                    aresta b = malloc(sizeof(struct aresta));
+                    b->peso = a->peso;
+                    vertice dest = a->destino;
+                    // Precisamos encontrar o destino entre os vértices do grafo
+                    //      de cópia
+                    for(no r=primeiro_no(gf->vertices); r; r=proximo_no(r)) {
+                        vertice y = (vertice) conteudo(r);
+                        // if(strcmp(nome_vertice(dest), nome_vertice(y)) == 0) {
+                        if(nome_vertice(dest) == nome_vertice(y)) {
+                            puts("vertices iguais");
+                            b->destino = y;
+                            insere_lista(b, v->arestas);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    return gf;
+}
+
 lista vizinhanca(vertice v, int direcao, grafo g){
     no atual = primeiro_no(g->vertices);
 
