@@ -285,3 +285,20 @@ int simplicial(vertice v, grafo g){
 
   return (clique(l,g));
 }
+
+int cordal(grafo g){
+  int eh_cordal = 1;
+
+  grafo novo_grafo = copia_grafo(g); // Copia o grafo
+
+  // For todos os vertices em g
+  for(no n=primeiro_no(novo_grafo->vertices); n; n=proximo_no(n)) {
+    // Verifica se continua clique
+    if(!clique(novo_grafo->vertices,g)) eh_cordal = 0;
+    // Tira um vertice
+    // TODO:funcao pra passar (IMPORTANTE, ELA DEVE EXCLUIR AS ARESTAS)
+    remove_no(novo_grafo->vertices, n, NULL);
+  }
+
+  return eh_cordal; // Xablau
+}
