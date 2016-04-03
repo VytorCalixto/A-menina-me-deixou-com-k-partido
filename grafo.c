@@ -60,7 +60,7 @@ unsigned int n_arestas(grafo g) {
         }
     }
 
-    return g->direcionado ? soma : (soma/2);
+    return soma;
 }
 
 grafo le_grafo(FILE *input){
