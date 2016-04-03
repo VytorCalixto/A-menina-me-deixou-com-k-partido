@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <graphviz/cgraph.h>
 #include <string.h>
 #include "grafo.h"
@@ -24,6 +25,21 @@ typedef struct aresta{
     long int peso;
     vertice *destino;
 } *aresta;
+
+void copy_string(char d[], char s[]) {
+    int c = 0;
+
+    while(s[c] != '\0')
+        ++c;
+    d = (char *) malloc(sizeof(char)*c);
+    c = 0;
+
+    while (s[c] != '\0') {
+        d[c] = s[c];
+        ++c;
+    }
+    d[c] = '\0';
+}
 
 char *nome_vertice(vertice v){
     return v->nome;
@@ -63,24 +79,26 @@ unsigned int n_arestas(grafo g) {
 }
 
 grafo le_grafo(FILE *input){
-    grafo gf;
+    grafo gf = malloc(sizeof(struct grafo));
     Agraph_t *g = agread(input, NULL);
     if(!g) {
         return NULL;
     }
 
     // gf.nome = agnameof(g);
-    copy_string(gf->nome, agnameof(g));
-    gf->direcionado = agisdirected(g);
+    copy_string(gf->nome, (char *)agnameof(g));
+    gf->direcionado = (agisdirected(g) ? 1 : 0);
     gf->ponderado = 0;
 
     // Insere todos os vértices
+    gf->vertices = constroi_lista();
     for(Agnode_t *n=agfstnode(g); n; n=agnxtnode(g, n)) {
-        vertice v;
+        vertice v = malloc(sizeof(struct vertice));
         v->nome = agnameof(n);
         v->grau = (unsigned int) agdegree(g, n, TRUE, TRUE);
         v->grau_ent = (unsigned int) agdegree(g, n, TRUE, FALSE);
         v->grau_sai = (unsigned int) agdegree(g, n, FALSE, TRUE);
+        v->arestas = constroi_lista();
         insere_lista(v, gf->vertices);
     }
 
@@ -95,7 +113,7 @@ grafo le_grafo(FILE *input){
             for(no p=primeiro_no(gf->vertices); p; p=proximo_no(p)) {
                 vertice w = (vertice) conteudo(n);
                 if(nome_vertice(w) == agnameof(e->node)) {
-                    aresta a;
+                    aresta a = malloc(sizeof(struct aresta));
                     a->peso = atoi(agget(e, (char *)"peso"));
                     a->destino = w;
                     insere_lista(a, v->arestas);
@@ -140,6 +158,7 @@ grafo escreve_grafo(FILE *output, grafo g){
         }
     }
     fprintf(output, "\n}");
+    return g;
 }
 
 // lista vizinhanca(vertice v, int direcao, grafo g){
@@ -164,18 +183,3 @@ grafo escreve_grafo(FILE *output, grafo g){
 //         // TODO: retorno de erro
 //     }
 // }
-
-void copy_string(char d[], char s[]) {
-    int c = 0;
-
-    while(s[c] != '\0')
-        ++c;
-    d = (char *) malloc(sizeof(char)*c);
-    c = 0;
-
-    while (s[c] != '\0') {
-        d[c] = s[c];
-        ++c;
-    }
-    d[c] = '\0';
-}
