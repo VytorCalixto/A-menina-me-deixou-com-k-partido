@@ -270,3 +270,14 @@ int pertence(int cmp(void *,void *), void *cont, lista l){
   }
   return encontrou;
 }
+
+int simplicial(vertice v, grafo g){
+  lista l = constroi_lista();
+
+  for(no p = primeiro_no(v->arestas); p; p=proximo_no(p)) {
+      aresta a = (aresta) conteudo(p);
+      insere_lista(a->destino,l);
+  }
+
+  return (clique(l,g));
+}
