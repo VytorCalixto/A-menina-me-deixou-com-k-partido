@@ -30,16 +30,23 @@ char *nome_vertice(vertice v){
 }
 
 grafo le_grafo(FILE *input){
+    grafo gf;
+    Agraph_t *g = agread(input, NULL);
+    if(!g) {
+        return NULL;
+    }
+    return g;
+
   //Pia, to com mto sono enquanto escrevo isso, n me julgue aoshfasfj
-  char buff[255];
-  grafo g;
-  fscanf(input, "%s", buff); // le a primeira palavra
-  if(buff == "digraph") // direcionado?
-    g->direcionado = 1;
-  else
-    g->direcionado = 0;
-  fscanf(input, "%s", buff); // le a segunda palavra
-  g->nome = buff; // que é o nome do grafo
+  // char buff[255];
+  // grafo g;
+  // fscanf(input, "%s", buff); // le a primeira palavra
+  // if(buff == "digraph") // direcionado?
+  //   g->direcionado = 1;
+  // else
+  //   g->direcionado = 0;
+  // fscanf(input, "%s", buff); // le a segunda palavra
+  // g->nome = buff; // que é o nome do grafo
 
   // TODO: Ler vertices, arestas e pesos;
 }

@@ -39,7 +39,16 @@ CFLAGS  = -std=c99 \
 .PHONY : all clean
 
 #------------------------------------------------------------------------------
-all : exemplo teste
+all : main exemplo teste
+
+main: main.c lista.o grafo.o
+	$(CC) $(CFLAGS) \
+	      -Wno-cast-qual \
+              -Wno-padded \
+              -Wno-undef \
+              -o $@ \
+              $^ \
+	      -l cgraph
 
 exemplo : exemplo.c lista.o
 	$(CC) $(CFLAGS) \
@@ -55,4 +64,4 @@ teste : teste.o grafo.o lista.o
 
 #------------------------------------------------------------------------------
 clean :
-	$(RM) exemplo teste *.o *.png
+	$(RM) exemplo teste main *.o *.png
