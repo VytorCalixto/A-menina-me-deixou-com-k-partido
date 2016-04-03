@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <graphviz/cgraph.h>
 #include "lista.h"
 #include "grafo.h"
@@ -21,5 +22,10 @@ int main(void) {
       puts("g nulo");
       return 1;
   }
+
+  FILE *out = fopen("output", "w");
+
+  escreve_grafo(out, g);
+
   return agerrors();
 }

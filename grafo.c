@@ -1,9 +1,8 @@
 #include <stdio.h>
 #include <graphviz/cgraph.h>
+#include <string.h>
 #include "grafo.h"
 #include "lista.h"
-#include <string.h>
-
 
 typedef struct grafo {
     int direcionado;
@@ -24,7 +23,7 @@ typedef struct vertice{
 typedef struct aresta{
     long int peso;
     vertice *destino;
-} aresta;
+} *aresta;
 
 char *nome_vertice(vertice v){
     return v->nome;
@@ -71,7 +70,7 @@ grafo le_grafo(FILE *input){
     }
 
     // gf.nome = agnameof(g);
-    strcopy(gf->nome, agnameof(g));
+    copy_string(gf->nome, agnameof(g));
     gf->direcionado = agisdirected(g);
     gf->ponderado = 0;
 
@@ -97,9 +96,9 @@ grafo le_grafo(FILE *input){
                 vertice w = (vertice) conteudo(n);
                 if(nome_vertice(w) == agnameof(e->node)) {
                     aresta a;
-                    a.peso = atoi(agget(e, (char *)"peso"));
-                    a.destino = &w;
-                    insere_lista(&a, v->arestas);
+                    a->peso = atoi(agget(e, (char *)"peso"));
+                    a->destino = w;
+                    insere_lista(a, v->arestas);
                 }
             }
         }
@@ -124,43 +123,59 @@ int destroi_grafo(void *g){
 }
 
 grafo escreve_grafo(FILE *output, grafo g){
-  output = fopen(nome_grafo(g),w);
-  fprintf(output, "strict %s",direcionado(g) ? "digraph " : "graph ");
-  fprintf(output, "\"%s\" {\n\n",nome_grafo(g));
-  for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
-    fprintf(output, "\"%s\"\n",nome_vertice(conteudo(n->(vertice)conteudo)));
-  }
-  for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
-    for(aresta a = n->arestas; a; a=proximo_no(a)) {
-      fprintf(output, "\"%s\"",nome_vertice(conteudo(n->(vertice)conteudo)));
-      fprintf(output, "%s",direcionado(g) ? " -> " : " -- ");
-      fprintf(output, "\"%s\"",nome_vertice(a->destino));
-      ponderado(g) ? fprintf(output, " [peso = %li]",a->peso);
-      fprintf(output, "\n");
+    fprintf(output, "strict %s",direcionado(g) ? "digraph " : "graph ");
+    fprintf(output, "\"%s\" {\n\n",nome_grafo(g));
+    for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
+        fprintf(output, "\"%s\"\n",nome_vertice((vertice)conteudo(n)));
     }
-  }
-  fprintf(output, "\n}");
+    for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
+        vertice v = (vertice) conteudo(n);
+        for(no p = primeiro_no(v->arestas); p; p=proximo_no(p)) {
+            aresta a = (aresta) conteudo(p);
+            fprintf(output, "\"%s\"", nome_vertice(v));
+            fprintf(output, "%s", direcionado(g) ? " -> " : " -- ");
+            fprintf(output, "\"%s\"", nome_vertice(*(a->destino)));
+            if(ponderado(g)) fprintf(output, " [peso = %li]", a->peso);
+            fprintf(output, "\n");
+        }
+    }
+    fprintf(output, "\n}");
 }
 
-lista vizinhanca(vertice v, int direcao, grafo g){
-    no atual = g->vertices->primeiro;
+// lista vizinhanca(vertice v, int direcao, grafo g){
+//     no atual = g->vertices->primeiro;
+//
+//     while((vertice)conteudo(atual) != v){
+//         atual = atual->proximo;
+//         // TODO: verificar caso o vertice nao esteja no grafo
+//     }
+//
+//     switch (direcao) {
+//         case 0:
+//         return (vertice)conteudo(atual)->grau;
+//         break;
+//         case -1:
+//         return (vertice)conteudo(atual)->grau_ent;
+//         break;
+//         case 1:
+//         return (vertice)conteudo(atual)->grau_sai;
+//         break;
+//         default:
+//         // TODO: retorno de erro
+//     }
+// }
 
-    while((vertice)conteudo(atual) != v){
-        atual = atual->proximo;
-        // TODO: verificar caso o vertice nao esteja no grafo
-    }
+void copy_string(char d[], char s[]) {
+    int c = 0;
 
-    switch (direcao) {
-        case 0:
-        return (vertice)conteudo(atual)->grau;
-        break;
-        case -1:
-        return (vertice)conteudo(atual)->grau_ent;
-        break;
-        case 1:
-        return (vertice)conteudo(atual)->grau_sai;
-        break;
-        default:
-        // TODO: retorno de erro
+    while(s[c] != '\0')
+        ++c;
+    d = (char *) malloc(sizeof(char)*c);
+    c = 0;
+
+    while (s[c] != '\0') {
+        d[c] = s[c];
+        ++c;
     }
+    d[c] = '\0';
 }

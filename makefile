@@ -41,7 +41,7 @@ CFLAGS  = -std=c99 \
 #------------------------------------------------------------------------------
 all : main exemplo teste
 
-main: main.c lista.o grafo.o
+main: main.c grafo.o lista.o
 	$(CC) $(CFLAGS) \
 	      -Wno-cast-qual \
               -Wno-padded \
