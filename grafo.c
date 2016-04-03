@@ -256,17 +256,25 @@ unsigned int grau(vertice v, int direcao, grafo g){
     }
 }
 
-int compare(void* a, void* b){
+int compara_vertice(void* a, void* b){
   if ((vertice) a == (vertice) b)
     return 1;
   else
     return 0;
 }
 
-int pertence(int cmp(void *,void *), void *cont, lista l){
-  int encontrou = 0;
-  for(no n=primeiro_no(l); n; n=proximo_no(n)) {
-      if (cmp(conteudo(n),cont)) encontrou = 1;
-  }
-  return encontrou;
+int clique(lista l, grafo g) {
+    for(no n=primeiro_no(l); n; n=proximo_no(n)) {
+        vertice v = (vertice) conteudo(n);
+        lista vizinhos = vizinhanca(v, 0, g);
+        // Percorremos a lista l. Se todo elemento de l estiver na vizinhança de v,
+        // então v é vizinho de todos os vértices em l
+        for(no p=primeiro_no(l); p; p=proximo_no(p)) {
+            vertice w = (vertice) conteudo(p);
+            if(w != v) {
+                if(!pertence(*compara_vertice, w, vizinhos)) return 1;
+            }
+        }
+    }
+    return 0;
 }
