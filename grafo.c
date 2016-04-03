@@ -8,7 +8,6 @@ typedef struct grafo {
   int ponderado;
   char* nome;
   lista vertices;
-  lista arestas;
 };
 
 char *nome_grafo(grafo g){
@@ -29,7 +28,7 @@ typedef struct vertice{
   unsigned int grau_ent; // Entrada dos direcionados
   unsigned int grau_sai; // Saída dos direcionados
 
-  //TODO: vizinhanca entrada / saida
+  lista arestas;
 };
 
 char *nome_vertice(vertice v){
@@ -47,18 +46,25 @@ grafo le_grafo(FILE *input){
     gf.direcionado = agisdirected(g);
     gf.ponderado = 0;
 
+    // Insere todos os vértices
     for(Agnode_t *n=agfstnode(g, n); n; n=agnxtnode(g, n)) {
         vertice v;
         v.nome = agnameof(n);
         v.grau = (unsigned int) agdegree(g, n, TRUE, TRUE);
         v.grau_ent = (unsigned int) agdegree(g, n, TRUE, FALSE);
         v.grau_sai = (unsigned int) agdegree(g, n, FALSE, TRUE);
-        insere_lista(n, gf.vertices);
-        for(Agedge_t *e=agfstout(g, n); e; e=agnxtout(g, e)) {
-            if(!gf.ponderado && agget(e, (char *)"peso")!=NULL) {
-                gf.ponderado = 1;
+        insere_lista(v, gf.vertices);
+    }
+
+    // Para cada vértice insere suas arestas
+    for(no *n=primeiro_no(gf.vertices); n; n=n->proximo) {
+        vertice v = (vertice) conteudo(no);
+        Agnote_t node = agnode(g, v->nome, FALSE);
+        for(Agedge_t *e=agfstout(g, node); e; e=agnxtedge(g, e)) {
+            if(!g.ponderado && agget(a, (char *)"peso") != NULL) {
+                h.ponderado = 1;
             }
-            insere_lista(gf.arestas, e);
+            insere_lista(e, v.vertices);
         }
     }
 

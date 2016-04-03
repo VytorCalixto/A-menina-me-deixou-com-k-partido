@@ -21,8 +21,5 @@ int main(void) {
       puts("g nulo");
       return 1;
   }
-
-  
-
   return agerrors();
 }
