@@ -161,25 +161,25 @@ grafo escreve_grafo(FILE *output, grafo g){
     return g;
 }
 
-// lista vizinhanca(vertice v, int direcao, grafo g){
-//     no atual = g->vertices->primeiro;
-//
-//     while((vertice)conteudo(atual) != v){
-//         atual = atual->proximo;
-//         // TODO: verificar caso o vertice nao esteja no grafo
-//     }
-//
-//     switch (direcao) {
-//         case 0:
-//         return (vertice)conteudo(atual)->grau;
-//         break;
-//         case -1:
-//         return (vertice)conteudo(atual)->grau_ent;
-//         break;
-//         case 1:
-//         return (vertice)conteudo(atual)->grau_sai;
-//         break;
-//         default:
-//         // TODO: retorno de erro
-//     }
-// }
+lista vizinhanca(vertice v, int direcao, grafo g){
+    no atual = primeiro_no(g->vertices);
+
+    while(((vertice)conteudo(atual) != v) || atual == NULL){
+        atual = proximo_no(atual);
+    }
+
+    switch (direcao) {
+        case 0:
+        return (((vertice)conteudo(atual))->grau);
+        break;
+        case -1:
+        return (((vertice)conteudo(atual))->grau_ent);
+        break;
+        case 1:
+        return (((vertice)conteudo(atual))->grau_sai);
+        break;
+        default:
+        break;
+        // TODO: retorno de erro
+    }
+}
