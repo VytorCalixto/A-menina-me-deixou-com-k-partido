@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <graphviz/cgraph.h>
 #include "grafo.h"
+#include "lista.h"
 
 typedef struct grafo {
   int direcionado;
@@ -41,20 +42,28 @@ grafo le_grafo(FILE *input){
     if(!g) {
         return NULL;
     }
-    return g;
 
-  //Pia, to com mto sono enquanto escrevo isso, n me julgue aoshfasfj
-  // char buff[255];
-  // grafo g;
-  // fscanf(input, "%s", buff); // le a primeira palavra
-  // if(buff == "digraph") // direcionado?
-  //   g->direcionado = 1;
-  // else
-  //   g->direcionado = 0;
-  // fscanf(input, "%s", buff); // le a segunda palavra
-  // g->nome = buff; // que é o nome do grafo
+    gf.nome = agnameof(g);
+    gf.direcionado = agisdirected(g);
+    gf.ponderado = 0;
 
-  // TODO: Ler vertices, arestas e pesos;
+    for(Agnode_t *n=agfstnode(g, n); n; n=agnxtnode(g, n)) {
+        vertice v;
+        v.nome = agnameof(n);
+        v.grau = (unsigned int) agdegree(g, n, TRUE, TRUE);
+        v.grau_ent = (unsigned int) agdegree(g, n, TRUE, FALSE);
+        v.grau_sai = (unsigned int) agdegree(g, n, FALSE, TRUE);
+        insere_lista(n, gf.vertices);
+        for(Agedge_t *e=agfstout(g, n); e; e=agnxtout(g, e)) {
+            if(!gf.ponderado && agget(e, (char *)"peso")!=NULL) {
+                gf.ponderado = 1;
+            }
+            insere_lista(gf.arestas, e);
+        }
+    }
+
+    agclose(g);
+    return gf;
 }
 
 int destroi_grafo(void *g){
