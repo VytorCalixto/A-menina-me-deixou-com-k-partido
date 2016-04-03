@@ -26,21 +26,6 @@ typedef struct aresta{
     vertice *destino;
 } *aresta;
 
-void copy_string(char d[], char s[]) {
-    int c = 0;
-
-    while(s[c] != '\0')
-        ++c;
-    d = (char *) malloc(sizeof(char)*c);
-    c = 0;
-
-    while (s[c] != '\0') {
-        d[c] = s[c];
-        ++c;
-    }
-    d[c] = '\0';
-}
-
 char *nome_vertice(vertice v){
     return v->nome;
 }
@@ -86,7 +71,8 @@ grafo le_grafo(FILE *input){
     }
 
     // gf.nome = agnameof(g);
-    copy_string(gf->nome, (char *)agnameof(g));
+    strcpy(gf->nome, agnameof(g));
+    printf("nome: %s\n", gf->nome);
     gf->direcionado = (agisdirected(g) ? 1 : 0);
     gf->ponderado = 0;
 
