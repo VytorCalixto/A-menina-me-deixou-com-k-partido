@@ -2,6 +2,7 @@
 #include <graphviz/cgraph.h>
 #include "grafo.h"
 #include "lista.h"
+#include <string.h>
 
 typedef struct grafo {
   int direcionado;
@@ -42,29 +43,30 @@ grafo le_grafo(FILE *input){
         return NULL;
     }
 
-    gf.nome = agnameof(g);
-    gf.direcionado = agisdirected(g);
-    gf.ponderado = 0;
+    // gf.nome = agnameof(g);
+    strcopy(gf->nome, agnameof(g));
+    gf->direcionado = agisdirected(g);
+    gf->ponderado = 0;
 
     // Insere todos os vértices
-    for(Agnode_t *n=agfstnode(g, n); n; n=agnxtnode(g, n)) {
+    for(Agnode_t *n=agfstnode(g); n; n=agnxtnode(g, n)) {
         vertice v;
-        v.nome = agnameof(n);
-        v.grau = (unsigned int) agdegree(g, n, TRUE, TRUE);
-        v.grau_ent = (unsigned int) agdegree(g, n, TRUE, FALSE);
-        v.grau_sai = (unsigned int) agdegree(g, n, FALSE, TRUE);
-        insere_lista(v, gf.vertices);
+        v->nome = agnameof(n);
+        v->grau = (unsigned int) agdegree(g, n, TRUE, TRUE);
+        v->grau_ent = (unsigned int) agdegree(g, n, TRUE, FALSE);
+        v->grau_sai = (unsigned int) agdegree(g, n, FALSE, TRUE);
+        insere_lista(v, gf->vertices);
     }
 
     // Para cada vértice insere suas arestas
-    for(no *n=primeiro_no(gf.vertices); n; n=n->proximo) {
-        vertice v = (vertice) conteudo(no);
-        Agnote_t node = agnode(g, v->nome, FALSE);
-        for(Agedge_t *e=agfstout(g, node); e; e=agnxtedge(g, e)) {
-            if(!g.ponderado && agget(a, (char *)"peso") != NULL) {
-                h.ponderado = 1;
+    for(no n=primeiro_no(gf->vertices); n; n=n->proximo) {
+        vertice v = (vertice) conteudo(n);
+        Agnode_t *node = agnode(g, v->nome, FALSE);
+        for(Agedge_t *e=agfstout(g, node); e; e=agnxtout(g, e)) {
+            if(!gf->ponderado && agget(e, (char *)"peso") != NULL) {
+                gf->ponderado = 1;
             }
-            insere_lista(e, v.vertices);
+            insere_lista(e, v->arestas);
         }
     }
 

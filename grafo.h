@@ -2,6 +2,7 @@
 #define _GRAFO_H
 
 #include <stdio.h>
+#include <string.h>
 #include "lista.h"
 
 //------------------------------------------------------------------------------
