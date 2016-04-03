@@ -68,17 +68,24 @@ int destroi_grafo(void *g){
 }
 
 lista vizinhanca(vertice v, int direcao, grafo g){
-  // Em construcao
+  no atual = g->lista->primeiro;
+
+  while((vertice)conteudo(atual) != v){
+    atual = vertice->proximo;
+    // TODO: verificar caso o vertice nao esteja no grafo
+  }
+
   switch (direcao) {
     case 0:
-      return v->grau;
+      return (vertice)conteudo(atual)->grau;
     break;
     case -1:
-      return v->grau_ent;
+      return (vertice)conteudo(atual)->grau_ent;
     break;
     case 1:
-      return v->grau_sai;
+      return (vertice)conteudo(atual)->grau_sai;
     break;
-    default: return
+    default:
+    // TODO: retorno de erro
   }
 }
