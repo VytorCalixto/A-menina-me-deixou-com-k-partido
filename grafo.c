@@ -280,12 +280,8 @@ int clique(lista l, grafo g) {
 }
 
 int simplicial(vertice v, grafo g){
-  lista l = constroi_lista();
 
-  for(no p = primeiro_no(v->arestas); p; p=proximo_no(p)) {
-      aresta a = (aresta) conteudo(p);
-      insere_lista(a->destino,l);
-  }
+  lista l = vizinhanca(v,0,g); // Tanto faz se 0 ou 1
 
   return (clique(l,g));
 }
