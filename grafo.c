@@ -6,7 +6,8 @@ typedef struct grafo {
   int direcionado;
   int ponderado;
   char* nome;
-  long int peso_aresta;
+  lista vertices;
+  lista arestas;
 };
 
 char *nome_grafo(grafo g){
@@ -23,6 +24,11 @@ int ponderado(grafo g){
 
 typedef struct vertice{
   char* nome;
+  unsigned int grau; // Para grafos não-direcionados
+  unsigned int grau_ent; // Entrada dos direcionados
+  unsigned int grau_sai; // Saída dos direcionados
+
+  //TODO: vizinhanca entrada / saida
 };
 
 char *nome_vertice(vertice v){
@@ -57,4 +63,22 @@ int destroi_grafo(void *g){
   return 1;
   // N tem como retornar 0 caso ocorra erro
   // Depois de um free ocorre undefined behaviour
+  //
+  // TODO: Passar por todos os vertices desalocando
+}
+
+lista vizinhanca(vertice v, int direcao, grafo g){
+  // Em construcao
+  switch (direcao) {
+    case 0:
+      return v->grau;
+    break;
+    case -1:
+      return v->grau_ent;
+    break;
+    case 1:
+      return v->grau_sai;
+    break;
+    default: return
+  }
 }
