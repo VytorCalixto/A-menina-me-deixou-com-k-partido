@@ -97,13 +97,17 @@ grafo le_grafo(FILE *input){
 }
 
 int destroi_grafo(void *g){
+    for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
+        vertice v = (vertice) conteudo(n);
+        //TODO: função para passar
+        destroi_lista(vertice->arestas, NULL);
+    }
+    //TODO: função
+    destroi_lista(((grafo) g)->vertices, NULL);
+
     free(g);
-    g = NULL;
+    // g = NULL;
     return 1;
-    // N tem como retornar 0 caso ocorra erro
-    // Depois de um free ocorre undefined behaviour
-    //
-    // TODO: Passar por todos os vertices desalocando
 }
 
 lista vizinhanca(vertice v, int direcao, grafo g){
