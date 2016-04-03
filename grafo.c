@@ -123,6 +123,25 @@ int destroi_grafo(void *g){
     return 1;
 }
 
+grafo escreve_grafo(FILE *output, grafo g){
+  output = fopen(nome_grafo(g),w);
+  fprintf(output, "strict %s",direcionado(g) ? "digraph " : "graph ");
+  fprintf(output, "\"%s\" {\n\n",nome_grafo(g));
+  for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
+    fprintf(output, "\"%s\"\n",nome_vertice(conteudo(n->(vertice)conteudo)));
+  }
+  for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
+    for(aresta a = n->arestas; a; a=proximo_no(a)) {
+      fprintf(output, "\"%s\"",nome_vertice(conteudo(n->(vertice)conteudo)));
+      fprintf(output, "%s",direcionado(g) ? " -> " : " -- ");
+      fprintf(output, "\"%s\"",nome_vertice(a->destino));
+      ponderado(g) ? fprintf(output, " [peso = %li]",a->peso);
+      fprintf(output, "\n");
+    }
+  }
+  fprintf(output, "\n}");
+}
+
 lista vizinhanca(vertice v, int direcao, grafo g){
     no atual = g->vertices->primeiro;
 
