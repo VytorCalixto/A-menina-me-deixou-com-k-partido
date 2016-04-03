@@ -13,9 +13,9 @@ struct no {
 // lista encadeada
 
 struct lista {
-  
+
   unsigned int tamanho;
-  int padding; // só pra evitar warning 
+  int padding; // só pra evitar warning
   no primeiro;
 };
 //---------------------------------------------------------------------------
@@ -31,7 +31,7 @@ no primeiro_no(lista l) { return l->primeiro; }
 
 //---------------------------------------------------------------------------
 // devolve o conteúdo do nó n
-//      ou NULL se n = NULL 
+//      ou NULL se n = NULL
 
 void *conteudo(no n) { return n->conteudo; }
 
@@ -50,7 +50,7 @@ lista constroi_lista(void) {
 
   lista l = malloc(sizeof(struct lista));
 
-  if ( ! l ) 
+  if ( ! l )
     return NULL;
 
   l->primeiro = NULL;
@@ -60,23 +60,23 @@ lista constroi_lista(void) {
 }
 //---------------------------------------------------------------------------
 // desaloca a lista l e todos os seus nós
-// 
+//
 // se destroi != NULL invoca
 //
-//     destroi(conteudo(n)) 
+//     destroi(conteudo(n))
 //
-// para cada nó n da lista. 
+// para cada nó n da lista.
 //
 // devolve 1 em caso de sucesso,
 //      ou 0 em caso de falha
 
-int destroi_lista(lista l, int destroi(void *)) { 
-  
+int destroi_lista(lista l, int destroi(void *)) {
+
   no p;
   int ok=1;
 
   while ( (p = primeiro_no(l)) ) {
-    
+
     l->primeiro = proximo_no(p);
 
     if ( destroi )
@@ -92,26 +92,26 @@ int destroi_lista(lista l, int destroi(void *)) {
 //---------------------------------------------------------------------------
 // insere um novo nó na lista l cujo conteúdo é p
 //
-// devolve o no recém-criado 
+// devolve o no recém-criado
 //      ou NULL em caso de falha
 
-no insere_lista(void *conteudo, lista l) { 
+no insere_lista(void *conteudo, lista l) {
 
   no novo = malloc(sizeof(struct no));
 
-  if ( ! novo ) 
+  if ( ! novo )
     return NULL;
 
   novo->conteudo = conteudo;
   novo->proximo = primeiro_no(l);
   ++l->tamanho;
-  
+
   return l->primeiro = novo;
 }
 
 //------------------------------------------------------------------------------
 // remove o no de endereço rno de l
-// se destroi != NULL, executa destroi(conteudo(rno)) 
+// se destroi != NULL, executa destroi(conteudo(rno))
 // devolve 1, em caso de sucesso
 //         0, se rno não for um no de l
 
@@ -138,4 +138,12 @@ int remove_no(struct lista *l, struct no *rno, int destroi(void *)) {
 		}
 	}
 	return 0;
+}
+
+int pertence(int cmp(void *,void *), void *cont, lista l){
+  int encontrou = 0;
+  for(no n=primeiro_no(l); n; n=proximo_no(n)) {
+      if (cmp(conteudo(n),cont)) encontrou = 1;
+  }
+  return encontrou;
 }
