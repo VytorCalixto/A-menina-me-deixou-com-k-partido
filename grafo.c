@@ -146,7 +146,7 @@ lista vizinhanca(vertice v, int direcao, grafo g){
     no atual = g->vertices->primeiro;
 
     while((vertice)conteudo(atual) != v){
-        atual = vertice->proximo;
+        atual = atual->proximo;
         // TODO: verificar caso o vertice nao esteja no grafo
     }
 
