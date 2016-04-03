@@ -68,7 +68,7 @@ int destroi_grafo(void *g){
 }
 
 lista vizinhanca(vertice v, int direcao, grafo g){
-  no atual = g->lista->primeiro;
+  no atual = g->vertices->primeiro;
 
   while((vertice)conteudo(atual) != v){
     atual = vertice->proximo;
