@@ -154,15 +154,50 @@ lista vizinhanca(vertice v, int direcao, grafo g){
         atual = proximo_no(atual);
     }
 
+    lista l = constroi_lista();
+
     switch (direcao) {
-        case 0:
-        return (((vertice)conteudo(atual))->grau);
-        break;
         case -1:
-        return (((vertice)conteudo(atual))->grau_ent);
+        case 0:
+          for(no p = primeiro_no(((vertice)atual)->arestas); p; p=proximo_no(p)) {
+              aresta a = (aresta) conteudo(p);
+              insere_lista(a->destino,l);
+          }
+          return l;
         break;
         case 1:
-        return (((vertice)conteudo(atual))->grau_sai);
+          for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
+              vertice vert = (vertice) conteudo(n);
+            for(no p = primeiro_no(vert->arestas); p; p=proximo_no(p)) {
+                aresta a = (aresta) conteudo(p);
+                if(nome_vertice(*(a->destino)) == nome_vertice(v))
+                  insere_lista(a->destino,l);
+            }
+          }
+          return l;
+        break;
+        default:
+        break;
+        // TODO: retorno de erro
+    }
+}
+
+unsigned int grau(vertice v, int direcao, grafo g){
+    no atual = primeiro_no(g->vertices);
+
+    while(((vertice)conteudo(atual) != v) || atual == NULL){
+        atual = proximo_no(atual);
+    }
+
+    switch (direcao) {
+        case 0:
+          return (((vertice)conteudo(atual))->grau);
+        break;
+        case -1:
+          return (((vertice)conteudo(atual))->grau_ent);
+        break;
+        case 1:
+          return (((vertice)conteudo(atual))->grau_sai);
         break;
         default:
         break;
