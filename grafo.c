@@ -111,18 +111,27 @@ grafo le_grafo(FILE *input){
     return gf;
 }
 
-int destroi_grafo(void *g){
-    for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
-        vertice v = (vertice) conteudo(n);
-        //TODO: função para passar
-        destroi_lista(v->arestas, NULL);
-    }
-    //TODO: função
-    destroi_lista(((grafo) g)->vertices, NULL);
-
-    free(g);
-    // g = NULL;
+int destroi_aresta(void *x) {
+    aresta a = (aresta) x;
+    free(a);
     return 1;
+ }
+
+ int destroi_vertice(void *x) {
+    vertice v = (vertice) x;
+    if(destroi_lista(v->arestas, *destroi_aresta)) {
+        free(v);
+        return 1;
+    }
+    return 0;
+ }
+
+int destroi_grafo(void *g){
+    if(destroi_lista(((grafo) g)->vertices, *destroi_vertice)){
+        free(g);
+        return 1;
+    }
+    return 0;
 }
 
 grafo escreve_grafo(FILE *output, grafo g){
@@ -281,11 +290,9 @@ int clique(lista l, grafo g) {
         vertice v = (vertice) conteudo(n);
 
         lista vizinhos = vizinhanca(v, (direcionado(g) ? 1 : 0), g);
-        printf("vertice v: %s\n", nome_vertice(v));
-        for(no k=primeiro_no(vizinhos); k; k=proximo_no(k)) {
-            printf("vizinho: %s\n", nome_vertice((vertice) conteudo(k)));
-        }
+
         if(tamanho_lista(vizinhos) == 0) continue;
+
         // Percorremos a lista l. Se todo elemento de l estiver na vizinhança de v,
         // então v é vizinho de todos os vértices em l
         for(no p=primeiro_no(l); p; p=proximo_no(p)) {
@@ -299,9 +306,7 @@ int clique(lista l, grafo g) {
 }
 
 int simplicial(vertice v, grafo g){
-
-    lista l = vizinhanca(v,0,g); // Tanto faz se 0 ou 1
-
+    lista l = vizinhanca(v,(direcionado(g) ? 1 : 0),g); // Tanto faz se 0 ou 1
     return (clique(l,g));
 }
 
@@ -316,7 +321,7 @@ int cordal(grafo g){
         if(!clique(novo_grafo->vertices,g)) eh_cordal = 0;
         // Tira um vertice
         // TODO:funcao pra passar (IMPORTANTE, ELA DEVE EXCLUIR AS ARESTAS)
-        remove_no(novo_grafo->vertices, n, NULL);
+        remove_no(novo_grafo->vertices, n, *destroi_vertice);
     }
 
     return eh_cordal; // Xablau
