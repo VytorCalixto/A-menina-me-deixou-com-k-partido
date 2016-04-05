@@ -209,8 +209,19 @@ lista vizinhanca(vertice v, int direcao, grafo g){
     lista l = constroi_lista();
 
     switch (direcao) {
-        case -1:
         case 0:
+        for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
+            vertice vert = (vertice) conteudo(n);
+            for(no p = primeiro_no(vert->arestas); p; p=proximo_no(p)) {
+                aresta a = (aresta) conteudo(p);
+                if(strcmp(nome_vertice((vertice)conteudo(n)), nome_vertice(v)) == 0)
+                  insere_lista(a->destino,l);
+                if(strcmp(nome_vertice(a->destino), nome_vertice(v)) == 0)
+                    insere_lista(vert,l);
+            }
+        }
+        break;
+        case -1:
         for(no p = primeiro_no(w->arestas); p; p=proximo_no(p)) {
             aresta a = (aresta) conteudo(p);
             insere_lista(a->destino,l);
