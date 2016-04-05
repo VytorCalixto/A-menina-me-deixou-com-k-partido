@@ -1,0 +1,5 @@
+strict digraph "wasd" {
+	a -> a
+	b -> b
+	c -> c
+}

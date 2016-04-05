@@ -279,7 +279,8 @@ int compara_vertice(void* a, void* b){
 int clique(lista l, grafo g) {
     for(no n=primeiro_no(l); n; n=proximo_no(n)) {
         vertice v = (vertice) conteudo(n);
-        lista vizinhos = vizinhanca(v, 0, g);
+
+        lista vizinhos = vizinhanca(v, (direcionado(g) ? 1 : 0), g);
         printf("vertice v: %s\n", nome_vertice(v));
         for(no k=primeiro_no(vizinhos); k; k=proximo_no(k)) {
             printf("vizinho: %s\n", nome_vertice((vertice) conteudo(k)));
