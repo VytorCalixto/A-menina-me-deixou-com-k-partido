@@ -269,6 +269,10 @@ int clique(lista l, grafo g) {
     for(no n=primeiro_no(l); n; n=proximo_no(n)) {
         vertice v = (vertice) conteudo(n);
         lista vizinhos = vizinhanca(v, 0, g);
+        printf("vertice v: %s\n", nome_vertice(v));
+        for(no k=primeiro_no(vizinhos); k; k=proximo_no(k)) {
+            printf("vizinho: %s\n", nome_vertice((vertice) conteudo(k)));
+        }
         if(tamanho_lista(vizinhos) == 0) continue;
         // Percorremos a lista l. Se todo elemento de l estiver na vizinhança de v,
         // então v é vizinho de todos os vértices em l
