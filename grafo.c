@@ -72,7 +72,6 @@ grafo le_grafo(FILE *input){
 
     gf->nome = malloc(1 + strlen(agnameof(g)));
     strcpy(gf->nome, agnameof(g));
-    printf("nome: %s\n", gf->nome);
     gf->direcionado = (agisdirected(g) ? 1 : 0);
     gf->ponderado = 0;
 
@@ -176,7 +175,7 @@ grafo copia_grafo(grafo g) {
             // se os vértices são os mesmos, começamos a cópia das arestas
             if(strcmp(nome_vertice(w), nome_vertice(v)) == 0) {
                 for(no t=primeiro_no(w->arestas); t; t=proximo_no(t)) {
-                    aresta a = (aresta) conteudo(p);
+                    aresta a = (aresta) conteudo(t);
                     aresta b = malloc(sizeof(struct aresta));
                     b->peso = a->peso;
                     vertice dest = a->destino;
@@ -184,8 +183,10 @@ grafo copia_grafo(grafo g) {
                     //      de cópia
                     for(no r=primeiro_no(gf->vertices); r; r=proximo_no(r)) {
                         vertice y = (vertice) conteudo(r);
+                        printf("y: %s\n", nome_vertice(y));
+                        printf("a->destino: %s\n", nome_vertice(a->destino));
+                        printf("dest: %s\n", nome_vertice(dest));
                         if(strcmp(nome_vertice(dest), nome_vertice(y)) == 0) {
-                            puts("vertices iguais");
                             b->destino = y;
                             insere_lista(b, v->arestas);
                         }
@@ -267,16 +268,17 @@ int clique(lista l, grafo g) {
     for(no n=primeiro_no(l); n; n=proximo_no(n)) {
         vertice v = (vertice) conteudo(n);
         lista vizinhos = vizinhanca(v, 0, g);
+        if(tamanho_lista(vizinhos) == 0) continue;
         // Percorremos a lista l. Se todo elemento de l estiver na vizinhança de v,
         // então v é vizinho de todos os vértices em l
         for(no p=primeiro_no(l); p; p=proximo_no(p)) {
             vertice w = (vertice) conteudo(p);
             if(w != v) {
-                if(!pertence(*compara_vertice, w, vizinhos)) return 1;
+                if(!pertence(*compara_vertice, w, vizinhos)) return 0;
             }
         }
     }
-    return 0;
+    return 1;
 }
 
 int simplicial(vertice v, grafo g){

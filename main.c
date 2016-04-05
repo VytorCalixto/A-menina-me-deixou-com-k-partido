@@ -25,6 +25,7 @@ int main(void) {
   FILE *out = fopen("output", "w");
 
   escreve_grafo(out, g);
+  printf("Cordal? %d\n", cordal(g));
 
   return agerrors();
 }
