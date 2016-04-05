@@ -99,7 +99,11 @@ grafo le_grafo(FILE *input){
                 vertice w = (vertice) conteudo(p);
                 if(strcmp(nome_vertice(w), agnameof(e->node)) == 0) {
                     aresta a = malloc(sizeof(struct aresta));
-                    a->peso = atol(agget(e, (char *)"peso"));
+                    // a->peso = atol(agget(e, (char *)"peso"));
+                    char *peso = agget(e, (char *)"peso");
+                    if(peso != NULL) {
+                        a->peso = atol(peso);
+                    }
                     a->destino = w;
                     insere_lista(a, v->arestas);
                 }
