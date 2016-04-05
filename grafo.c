@@ -183,9 +183,6 @@ grafo copia_grafo(grafo g) {
                     //      de cópia
                     for(no r=primeiro_no(gf->vertices); r; r=proximo_no(r)) {
                         vertice y = (vertice) conteudo(r);
-                        printf("y: %s\n", nome_vertice(y));
-                        printf("a->destino: %s\n", nome_vertice(a->destino));
-                        printf("dest: %s\n", nome_vertice(dest));
                         if(strcmp(nome_vertice(dest), nome_vertice(y)) == 0) {
                             b->destino = y;
                             insere_lista(b, v->arestas);
