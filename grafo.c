@@ -99,7 +99,8 @@ grafo le_grafo(FILE *input){
                 vertice w = (vertice) conteudo(p);
                 if(strcmp(nome_vertice(w), agnameof(e->node)) == 0) {
                     aresta a = malloc(sizeof(struct aresta));
-                    a->peso = (long int) agget(e, (char *)"peso");
+                    a->peso = atol(agget(e, (char *)"peso"));
+                    printf("peso: %d\n", a->peso);
                     a->destino = w;
                     insere_lista(a, v->arestas);
                 }
@@ -326,13 +327,22 @@ int cordal(grafo g){
     int eh_cordal = 1;
 
     grafo novo_grafo = copia_grafo(g); // Copia o grafo
-    
-    while(tamanho_lista(novo_grafo->vertices) > 0 && eh_cordal) {
-        no n = primeiro_no(novo_grafo->vertices);
+
+    no n = primeiro_no(novo_grafo->vertices);
+    while(tamanho_lista(novo_grafo->vertices) > 0 && n) {
         vertice v = (vertice) conteudo(n);
-        if(!simplicial(v, novo_grafo)) eh_cordal = 0;
-        destroi_referencias(v, novo_grafo);
-        remove_no(novo_grafo->vertices, n, *destroi_vertice);
+        printf("%s é o vértice atual.\t", nome_vertice(v));
+        if(simplicial(v, novo_grafo)) {
+            printf("%s é simplicial. Removendo...\n", nome_vertice(v));
+            destroi_referencias(v, novo_grafo);
+            remove_no(novo_grafo->vertices, n, *destroi_vertice);
+            n = primeiro_no(novo_grafo->vertices);
+            eh_cordal = 1;
+        } else {
+            printf("%s não é simplicial. Próximo!\n", nome_vertice(v));
+            n = proximo_no(n);
+            eh_cordal = 0;
+        }
     }
 
     return eh_cordal; // Xablau

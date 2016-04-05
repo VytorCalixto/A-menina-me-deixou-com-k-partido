@@ -1,5 +1,5 @@
-strict graph "asd" {
-	a -- b
-	b -- c
-	a -- c
+strict digraph "asd" {
+	a -> b
+	b -> c
+	c -> a
 }

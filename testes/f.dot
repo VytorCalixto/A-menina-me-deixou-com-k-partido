@@ -2,5 +2,6 @@ strict graph "wasd" {
 	a -- b
 	b -- c
 	c -- d
-	b -- d
+	d -- a
+	a -- c
 }
