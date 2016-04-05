@@ -1,5 +1,6 @@
-strict digraph "wasd" {
-	a -> a
-	b -> b
-	c -> c
+strict graph "wasd" {
+	a -- b
+	b -- c
+	c -- d
+	b -- d
 }

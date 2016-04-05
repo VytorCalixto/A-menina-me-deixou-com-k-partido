@@ -117,14 +117,26 @@ int destroi_aresta(void *x) {
     return 1;
  }
 
- int destroi_vertice(void *x) {
+int destroi_vertice(void *x) {
     vertice v = (vertice) x;
     if(destroi_lista(v->arestas, *destroi_aresta)) {
         free(v);
         return 1;
     }
     return 0;
- }
+}
+
+void destroi_referencias(vertice v, grafo g) {
+    for(no n = primeiro_no(g->vertices); n; n = proximo_no(n)) {
+        vertice w = (vertice) conteudo(n);
+        for(no p = primeiro_no(w->arestas); p; p = proximo_no(p)) {
+            aresta a = (aresta) conteudo(p);
+            if(strcmp(nome_vertice(a->destino), nome_vertice(v)) == 0) {
+                remove_no(w->arestas, p, *destroi_aresta);
+            }
+        }
+    }
+}
 
 int destroi_grafo(void *g){
     if(destroi_lista(((grafo) g)->vertices, *destroi_vertice)){
@@ -306,7 +318,7 @@ int clique(lista l, grafo g) {
 }
 
 int simplicial(vertice v, grafo g){
-    lista l = vizinhanca(v,(direcionado(g) ? 1 : 0),g); // Tanto faz se 0 ou 1
+    lista l = vizinhanca(v,(direcionado(g) ? 1 : 0),g);
     return (clique(l,g));
 }
 
@@ -314,13 +326,12 @@ int cordal(grafo g){
     int eh_cordal = 1;
 
     grafo novo_grafo = copia_grafo(g); // Copia o grafo
-
-    // For todos os vertices em g
-    for(no n=primeiro_no(novo_grafo->vertices); n; n=proximo_no(n)) {
-        // Verifica se continua clique
-        if(!clique(novo_grafo->vertices,g)) eh_cordal = 0;
-        // Tira um vertice
-        // TODO:funcao pra passar (IMPORTANTE, ELA DEVE EXCLUIR AS ARESTAS)
+    
+    while(tamanho_lista(novo_grafo->vertices) > 0 && eh_cordal) {
+        no n = primeiro_no(novo_grafo->vertices);
+        vertice v = (vertice) conteudo(n);
+        if(!simplicial(v, novo_grafo)) eh_cordal = 0;
+        destroi_referencias(v, novo_grafo);
         remove_no(novo_grafo->vertices, n, *destroi_vertice);
     }
 
