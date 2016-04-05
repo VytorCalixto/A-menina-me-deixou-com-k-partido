@@ -199,8 +199,11 @@ grafo copia_grafo(grafo g) {
 lista vizinhanca(vertice v, int direcao, grafo g){
     no atual = primeiro_no(g->vertices);
 
-    while(((vertice)conteudo(atual) != v) || atual == NULL){
+    vertice w = (vertice) conteudo(atual);
+
+    while(strcmp(nome_vertice(v), nome_vertice(w)) != 0){
         atual = proximo_no(atual);
+        w = (vertice) conteudo(atual);
     }
 
     lista l = constroi_lista();
@@ -208,27 +211,27 @@ lista vizinhanca(vertice v, int direcao, grafo g){
     switch (direcao) {
         case -1:
         case 0:
-          for(no p = primeiro_no(((vertice)atual)->arestas); p; p=proximo_no(p)) {
-              aresta a = (aresta) conteudo(p);
-              insere_lista(a->destino,l);
-          }
-          return l;
+        for(no p = primeiro_no(w->arestas); p; p=proximo_no(p)) {
+            aresta a = (aresta) conteudo(p);
+            insere_lista(a->destino,l);
+        }
         break;
         case 1:
-          for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
-              vertice vert = (vertice) conteudo(n);
+        for(no n=primeiro_no(((grafo) g)->vertices); n; n=proximo_no(n)) {
+            vertice vert = (vertice) conteudo(n);
             for(no p = primeiro_no(vert->arestas); p; p=proximo_no(p)) {
                 aresta a = (aresta) conteudo(p);
-                if(nome_vertice(*(a->destino)) == nome_vertice(v))
-                  insere_lista(a->destino,l);
+                if(strcmp(a->destino, v) == 0)
+                    insere_lista(a->destino,l);
             }
-          }
-          return l;
+        }
         break;
         default:
         break;
         // TODO: retorno de erro
     }
+
+    return l;
 }
 
 unsigned int grau(vertice v, int direcao, grafo g){
@@ -240,13 +243,13 @@ unsigned int grau(vertice v, int direcao, grafo g){
 
     switch (direcao) {
         case 0:
-          return (((vertice)conteudo(atual))->grau);
+        return (((vertice)conteudo(atual))->grau);
         break;
         case -1:
-          return (((vertice)conteudo(atual))->grau_ent);
+        return (((vertice)conteudo(atual))->grau_ent);
         break;
         case 1:
-          return (((vertice)conteudo(atual))->grau_sai);
+        return (((vertice)conteudo(atual))->grau_sai);
         break;
         default:
         break;
@@ -255,9 +258,10 @@ unsigned int grau(vertice v, int direcao, grafo g){
 }
 
 int compara_vertice(void* a, void* b){
-  if ((vertice) a == (vertice) b)
-    return 1;
-  else
+    vertice v = (vertice) a;
+    vertice w = (vertice) b;
+    if (strcmp(nome_vertice(v), nome_vertice(w)) == 0)
+        return 1;
     return 0;
 }
 
@@ -280,24 +284,24 @@ int clique(lista l, grafo g) {
 
 int simplicial(vertice v, grafo g){
 
-  lista l = vizinhanca(v,0,g); // Tanto faz se 0 ou 1
+    lista l = vizinhanca(v,0,g); // Tanto faz se 0 ou 1
 
-  return (clique(l,g));
+    return (clique(l,g));
 }
 
 int cordal(grafo g){
-  int eh_cordal = 1;
+    int eh_cordal = 1;
 
-  grafo novo_grafo = copia_grafo(g); // Copia o grafo
+    grafo novo_grafo = copia_grafo(g); // Copia o grafo
 
-  // For todos os vertices em g
-  for(no n=primeiro_no(novo_grafo->vertices); n; n=proximo_no(n)) {
-    // Verifica se continua clique
-    if(!clique(novo_grafo->vertices,g)) eh_cordal = 0;
-    // Tira um vertice
-    // TODO:funcao pra passar (IMPORTANTE, ELA DEVE EXCLUIR AS ARESTAS)
-    remove_no(novo_grafo->vertices, n, NULL);
-  }
+    // For todos os vertices em g
+    for(no n=primeiro_no(novo_grafo->vertices); n; n=proximo_no(n)) {
+        // Verifica se continua clique
+        if(!clique(novo_grafo->vertices,g)) eh_cordal = 0;
+        // Tira um vertice
+        // TODO:funcao pra passar (IMPORTANTE, ELA DEVE EXCLUIR AS ARESTAS)
+        remove_no(novo_grafo->vertices, n, NULL);
+    }
 
-  return eh_cordal; // Xablau
+    return eh_cordal; // Xablau
 }
