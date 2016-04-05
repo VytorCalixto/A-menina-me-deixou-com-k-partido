@@ -100,7 +100,6 @@ grafo le_grafo(FILE *input){
                 if(strcmp(nome_vertice(w), agnameof(e->node)) == 0) {
                     aresta a = malloc(sizeof(struct aresta));
                     a->peso = atol(agget(e, (char *)"peso"));
-                    printf("peso: %d\n", a->peso);
                     a->destino = w;
                     insere_lista(a, v->arestas);
                 }
@@ -331,15 +330,12 @@ int cordal(grafo g){
     no n = primeiro_no(novo_grafo->vertices);
     while(tamanho_lista(novo_grafo->vertices) > 0 && n) {
         vertice v = (vertice) conteudo(n);
-        printf("%s é o vértice atual.\t", nome_vertice(v));
         if(simplicial(v, novo_grafo)) {
-            printf("%s é simplicial. Removendo...\n", nome_vertice(v));
             destroi_referencias(v, novo_grafo);
             remove_no(novo_grafo->vertices, n, *destroi_vertice);
             n = primeiro_no(novo_grafo->vertices);
             eh_cordal = 1;
         } else {
-            printf("%s não é simplicial. Próximo!\n", nome_vertice(v));
             n = proximo_no(n);
             eh_cordal = 0;
         }
