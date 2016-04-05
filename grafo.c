@@ -238,8 +238,8 @@ lista vizinhanca(vertice v, int direcao, grafo g){
         }
         break;
         default:
+        return NULL;
         break;
-        // TODO: retorno de erro
     }
 
     return l;
@@ -263,8 +263,8 @@ unsigned int grau(vertice v, int direcao, grafo g){
         return (((vertice)conteudo(atual))->grau_sai);
         break;
         default:
+        return -1;
         break;
-        // TODO: retorno de erro
     }
 }
 
