@@ -27,5 +27,7 @@ int main(void) {
   escreve_grafo(out, g);
   printf("Cordal? %d\n", cordal(g));
 
+  destroi_grafo(g);
+
   return agerrors();
 }
