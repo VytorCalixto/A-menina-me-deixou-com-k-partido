@@ -54,14 +54,16 @@ escreve_grafo escreve no arquivo passado como parâmetro o grafo como especifica
 
 copia_grafo começa copiando os vértices do grafo e depois "monta" as listas de aresta de cada vértice;
 
-vizinhanca
+vizinhanca passa primeiro por todos os vértices procurando o vértice que se deseja saber a vizinhança (que chamarei aqui de v, para ser mais fácil de explicar). Depois analiza-se o valor de direção, se for 0 (não-direcionado), ele passa pela lista de arestas de TODOS os nos do grafo. No caso, temos duas opções para ser vizinho: caso o nodo que estamos é o pŕoprio v, todos os destinos das suas arestas são seu vizinhos. Ou, caso estejamos em outro vértice, mas o destino da aresta desse vértice é v, este vértice também é vizinho. Caso direção seja 1, só precisamos achar v e indicar todas suas arestas (lembrando que o vértice não grava as arestas que chegam nele). Caso seja -1, passamos pelas arestas de TODOS os vertices, só que dessa vez só inserindo aquelas cujo destino é v; 
 
-grau
+grau apenas encontra o vértice que gostaríamos e retorna grau, grau_ent ou grau_sai, conforme especificado acima;
 
 compara_vertice compara se dois vértices são iguais;
 
 clique monta a vizinhança de cada vértice na lista l e compara se os vértices na lista l são vizinhos;
 
-simplicial
+simplicial monta a vizinhança do vértice e ve se essa vizinhança é clique;
 
-cordal
+cordal ve se um vértice é simplicial, se sim, excluimos ele até sobrar um só (é cordal). Quando o vértice não é simplicial passamos para o próximo no grafo. Caso cheguemos ao fim do grafo, assumimos que ele não é cordal. Isso ocorre quando adentramos uma sequência de vértices que continham vértices simpliciais;
+
+Foi utilizada a ferramenta valgrind para checar por vazamentos de memória e corrigidos todos menos três indicados pelo valgrind: todos eles envolvendo a liberação de memória causada por listas. Nas funções de clique e simplicial são criadas listas para facilitar a abstração do algoritmo, entretanto estas listas tem como conteúdo em seus nó ponteiros para vértices, ponteiros estes que apontam para o mesmo lugar que os ponteiros do grafo. Logo, ao desalocar a lista, acabávamos desalocando também vértices pertencentes ao grafo, o que causava falha de segmentação, já que outras partes do código acabavam tentando acessar uma posição que já havia sido liberada na memória.
