@@ -144,6 +144,7 @@ void destroi_referencias(vertice v, grafo g) {
 
 int destroi_grafo(void *g){
     if(destroi_lista(((grafo) g)->vertices, *destroi_vertice)){
+        free(((grafo) g)->nome);
         free(g);
         return 1;
     }
