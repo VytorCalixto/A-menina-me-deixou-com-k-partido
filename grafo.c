@@ -303,10 +303,11 @@ int compara_vertice(void* a, void* b){
 }
 
 int clique(lista l, grafo g) {
+    lista vizinhos;
     for(no n=primeiro_no(l); n; n=proximo_no(n)) {
         vertice v = (vertice) conteudo(n);
 
-        lista vizinhos = vizinhanca(v, (direcionado(g) ? 1 : 0), g);
+        vizinhos = vizinhanca(v, (direcionado(g) ? 1 : 0), g);
 
         if(tamanho_lista(vizinhos) == 0) continue;
 
