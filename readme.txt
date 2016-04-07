@@ -44,4 +44,24 @@ le_grafo "malloca" uma struct grafo, utilizando-se do libcgraph para construir p
 
 destroi_aresta é uma função nova que apenas desaloca uma aresta da memória;
 
-destroi_vertice passa primeiro... dps termino o readme
+destroi_vertice primeiro destroi a lista de arestas do vértice e depois desaloca o vértice;
+
+destroi_referencias é utilizada na função cordal para apagar referências a um vértice. A função percorre o grafo removendo todas as arestas cujo destino é o vértice informado;
+
+destroi_grafo destroi a lista de vértices (utilizando destroi_lista e destroi_vertice) e depois desaloca o grafo;
+
+escreve_grafo escreve no arquivo passado como parâmetro o grafo como especificado;
+
+copia_grafo começa copiando os vértices do grafo e depois "monta" as listas de aresta de cada vértice;
+
+vizinhanca
+
+grau
+
+compara_vertice compara se dois vértices são iguais;
+
+clique monta a vizinhança de cada vértice na lista l e compara se os vértices na lista l são vizinhos;
+
+simplicial
+
+cordal
