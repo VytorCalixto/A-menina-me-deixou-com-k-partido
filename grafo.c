@@ -344,6 +344,6 @@ int cordal(grafo g){
             eh_cordal = 0;
         }
     }
-
+    destroi_grafo(novo_grafo);
     return eh_cordal; // Xablau
 }
