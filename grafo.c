@@ -117,13 +117,16 @@ grafo le_grafo(FILE *input){
 
 int destroi_aresta(void *x) {
     aresta a = (aresta) x;
-    free(a);
-    return 1;
+    if(a) {
+        free(a);
+        return 1;
+    }
+    return 0;
  }
 
 int destroi_vertice(void *x) {
     vertice v = (vertice) x;
-    if(destroi_lista(v->arestas, *destroi_aresta)) {
+    if(v && destroi_lista(v->arestas, *destroi_aresta)) {
         free(v);
         return 1;
     }
@@ -143,9 +146,10 @@ void destroi_referencias(vertice v, grafo g) {
 }
 
 int destroi_grafo(void *g){
-    if(destroi_lista(((grafo) g)->vertices, *destroi_vertice)){
-        free(((grafo) g)->nome);
-        free(g);
+    grafo gf = (grafo) g;
+    if(destroi_lista(gf->vertices, *destroi_vertice)){
+        free(gf->nome);
+        free(gf);
         return 1;
     }
     return 0;
